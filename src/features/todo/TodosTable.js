@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchTodos,addTodo, deleteTodo,setTodos } from "./todosSlice";
 import { Button, DataTable,Table,
@@ -6,7 +6,8 @@ import { Button, DataTable,Table,
   TableRow,
   TableHeader,
   TableBody,
-    TableCell
+    TableCell,
+    TextInput
 } from '@carbon/react';
 import { Add, TrashCan } from '@carbon/react/icons';
 import styles from './Todos.module.scss';
@@ -26,11 +27,18 @@ const columns = [
     
   },
 ];
+
 export function TodosTable (){
   const dispatch = useDispatch();
     const { items, loading, error } = useSelector((state) => state.todos);
+    const [showInput, setShowInput]=useState(true);
+    const [newTodo, setNewTod]=useState("");
     const handleAddTodo = () => {
-    dispatch(addTodo({ title: "New Todo", completed: false }));
+        if(newTodo){
+            dispatch(addTodo({ id: items?.length + 1, title: newTodo, completed: false }));
+            setShowInput(false);
+            setNewTod("")
+        }
   };
 
     const handleDeleteTodo = id => {
@@ -52,7 +60,24 @@ return <div>Error: {error.message}</div>;
 }
     return (
         <><div className={styles.toolbar}>
-            <Button onClick={handleAddTodo} className="button" size="md" renderIcon={Add} iconDescription="Add">Add Todo List</Button>
+           { showInput ? 
+            <>
+            <div
+  style={{
+    width: 300
+  }}
+>
+  <TextInput
+    className="input-test-class"
+    id="text-input-1"
+    onChange={(e) => setNewTod(e.target.value)}
+    onClick={function noRefCheck(){}}
+    placeholder="eg. Walk with nature"
+    playgroundWidth={300}
+    size="md"
+    type="text"
+  />
+</div><Button onClick={handleAddTodo} className="button" size="md" renderIcon={Add} iconDescription="Add">Save</Button></> :  <Button onClick={(showInput)=>setShowInput(true)} className="button" size="md" renderIcon={Add} iconDescription="Add">Add Todo List</Button> }
             
         </div><DataTable rows={items || []} headers={columns}>
                 {({ rows, headers, getTableProps, getHeaderProps, getRowProps }) => (
