@@ -7,7 +7,8 @@ import { Button, DataTable,Table,
   TableHeader,
   TableBody,
     TableCell,
-    TextInput
+    TextInput,
+    TableContainer,
 } from '@carbon/react';
 import { Add, TrashCan } from '@carbon/react/icons';
 import styles from './Todos.module.scss';
@@ -31,7 +32,7 @@ const columns = [
 export function TodosTable (){
   const dispatch = useDispatch();
     const { items, loading, error } = useSelector((state) => state.todos);
-    const [showInput, setShowInput]=useState(true);
+    const [showInput, setShowInput]=useState(false);
     const [newTodo, setNewTod]=useState("");
     const handleAddTodo = () => {
         if(newTodo){
@@ -59,7 +60,11 @@ if (error) {
 return <div>Error: {error.message}</div>;
 }
     return (
-        <><div className={styles.toolbar}>
+        <><DataTable rows={items || []} headers={columns} isSortable stickyHeader>
+                {({ rows, headers, getTableProps, getHeaderProps, getRowProps, getSelectionProps, getTableContainerProps }) => (
+                    <TableContainer
+                     {...getTableContainerProps()}>
+                        <div className={styles.toolbar}>
            { showInput ? 
             <>
             <div
@@ -79,8 +84,7 @@ return <div>Error: {error.message}</div>;
   />
 </div><Button onClick={handleAddTodo} className="button" size="md" renderIcon={Add} iconDescription="Add">Save</Button></> :  <Button onClick={(showInput)=>setShowInput(true)} className="button" size="md" renderIcon={Add} iconDescription="Add">Add Todo List</Button> }
             
-        </div><DataTable rows={items || []} headers={columns}>
-                {({ rows, headers, getTableProps, getHeaderProps, getRowProps }) => (
+        </div>
                     <Table {...getTableProps()}>
                         <TableHead>
                             <TableRow>
@@ -92,8 +96,8 @@ return <div>Error: {error.message}</div>;
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {rows.map((row) => (
-                                <TableRow {...getRowProps({ row })}>
+                            {rows.map((row,i) => (
+                                <TableRow {...getRowProps({ row })} key={i}>
                                     {row.cells.map((cell, index) => {
                                         if (index === row.cells.length - 2) {
                                             return (<TableCell key={cell.id}>{row.completed ? 'Completed' : 'Not Completed'}</TableCell>);
@@ -111,6 +115,7 @@ return <div>Error: {error.message}</div>;
                             ))}
                         </TableBody>
                     </Table>
+                    </TableContainer>
                 )}
             </DataTable></>
            
