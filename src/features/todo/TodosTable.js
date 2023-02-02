@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchTodos, addTodo, deleteTodo, setTodos } from './todosSlice';
+import { fetchTodos, addTodo, deleteTodo } from './todosSlice';
 import {
   Button,
   DataTable,
@@ -13,7 +13,7 @@ import {
   TextInput,
   TableContainer,
 } from '@carbon/react';
-import { Add, TrashCan } from '@carbon/react/icons';
+import { Add, Close } from '@carbon/react/icons';
 import styles from './Todos.module.scss';
 
 const columns = [
@@ -49,9 +49,6 @@ export function TodosTable() {
   const handleDeleteTodo = (id) => {
     dispatch(deleteTodo(id));
   };
-  const handleStatusTodo = (id) => {
-    dispatch(setTodos(id));
-  };
   useEffect(() => {
     dispatch(fetchTodos());
   }, [dispatch]);
@@ -65,14 +62,13 @@ export function TodosTable() {
   }
   return (
     <>
-      <DataTable rows={items || []} headers={columns} isSortable stickyHeader>
+      <DataTable rows={items || []} headers={columns} isSortables>
         {({
           rows,
           headers,
           getTableProps,
           getHeaderProps,
           getRowProps,
-          getSelectionProps,
           getTableContainerProps,
         }) => (
           <TableContainer {...getTableContainerProps()}>
@@ -144,7 +140,7 @@ export function TodosTable() {
                               hasIconOnly
                               onClick={() => handleDeleteTodo(row.id)}
                               size="sm"
-                              renderIcon={TrashCan}
+                              renderIcon={Close}
                               kind="danger"
                               iconDescription="Delete this row"
                               tooltipAlignment="start"
