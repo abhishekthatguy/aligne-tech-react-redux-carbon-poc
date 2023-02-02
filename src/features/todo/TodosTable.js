@@ -103,7 +103,7 @@ export function TodosTable() {
                 </>
               ) : (
                 <Button
-                  onClick={(showInput) => setShowInput(true)}
+                  onClick={() => setShowInput(true)}
                   className="button"
                   size="md"
                   renderIcon={Add}
@@ -116,8 +116,8 @@ export function TodosTable() {
             <Table {...getTableProps()}>
               <TableHead>
                 <TableRow>
-                  {headers.map((header) => (
-                    <TableHeader {...getHeaderProps({ header })}>
+                  {headers.map((header,index) => (
+                    <TableHeader {...getHeaderProps({ header })} key={index}>
                       {header.header}
                     </TableHeader>
                   ))}

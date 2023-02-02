@@ -3,7 +3,7 @@ import axios from 'axios';
 
 export const fetchTodos = createAsyncThunk(
   'todos/fetchTodos',
-  async (dispatch) => {
+  async () => {
     const response = await axios.get(
       'https://jsonplaceholder.typicode.com/todos',
       {
