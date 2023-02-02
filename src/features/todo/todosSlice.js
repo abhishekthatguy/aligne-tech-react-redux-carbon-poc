@@ -1,32 +1,37 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import axios from 'axios';
 
-export const fetchTodos = createAsyncThunk("todos/fetchTodos", async (dispatch)  => {
-  debugger;
-  const response = await axios.get("https://jsonplaceholder.typicode.com/todos", {
-    headers: {
-      'Content-type': 'application/json; charset=UTF-8',
-    }
-  });
-  return response.data;
-});
+export const fetchTodos = createAsyncThunk(
+  'todos/fetchTodos',
+  async (dispatch) => {
+    const response = await axios.get(
+      'https://jsonplaceholder.typicode.com/todos',
+      {
+        headers: {
+          'Content-type': 'application/json; charset=UTF-8',
+        },
+      },
+    );
+    return response.data;
+  },
+);
 
 const todosSlice = createSlice({
-  name: "todos",
+  name: 'todos',
   initialState: {
     items: [],
     loading: false,
     error: null,
   },
-    reducers: {
+  reducers: {
     setTodos: (state, action) => {
       state.items = action.payload;
     },
     addTodo: (state, action) => {
-      state.items.splice(0,0,action.payload);
+      state.items.splice(0, 0, action.payload);
     },
     deleteTodo: (state, action) => {
-      state.items = state.items.filter(todo => todo.id !== action.payload);
+      state.items = state.items.filter((todo) => todo.id !== action.payload);
     },
   },
   extraReducers: {
